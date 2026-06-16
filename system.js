@@ -1,104 +1,103 @@
-// Manejo dinámico de campos condicionales (Ka y Kb)
-document.getElementById('acid-type').addEventListener('change', function() {
-    const kaGroup = document.querySelector('.id-ka');
-    kaGroup.style.display = this.value === 'weak' ? 'flex' : 'none';
-});
-
-document.getElementById('base-type').addEventListener('change', function() {
-    const kbGroup = document.querySelector('.id-kb');
-    kbGroup.style.display = this.value === 'weak' ? 'flex' : 'none';
-});
-
-// Constante del producto iónico del agua (Kw)
-const Kw = 1e-14;
-
-// Función auxiliar para formatear en notación científica si es muy pequeño
-function formatValue(val) {
-    return val < 0.001 || val > 1000 ? val.toExponential(4) : val.toFixed(4);
-}
-
-// CÁLCULOS PARA ÁCIDOS
-function calcularAcido() {
-    const type = document.getElementById('acid-type').value;
-    const conc = parseFloat(document.getElementById('acid-conc').value);
-    const resultsDiv = document.getElementById('acid-results');
+document.addEventListener("DOMContentLoaded", () => {
     
-    if (isNaN(conc) || conc <= 0) {
-        alert("Por favor, introduce una concentración válida mayor que 0.");
-        return;
-    }
+    // === INTERACTIVIDAD DE MENÚS (MOSTRAR / OCULTAR CONSTANTES) ===
+    const acidType = document.getElementById("acid-type");
+    const kaContainer = document.getElementById("ka-acid-container");
+    
+    acidType.addEventListener("change", () => {
+        if (acidType.value === "weak") {
+            kaContainer.classList.remove("hidden");
+        } else {
+            kaContainer.classList.add("hidden");
+        }
+    });
 
-    let h_concentration = 0;
+    const baseType = document.getElementById("base-type");
+    const kbContainer = document.getElementById("kb-base-container");
 
-    if (type === 'strong') {
-        // Ácido fuerte: [H+] = Concentración inicial
-        h_concentration = conc;
-    } else {
-        // Ácido débil: Requiere constante Ka
-        const ka = parseFloat(document.getElementById('acid-ka').value);
-        if (isNaN(ka) || ka <= 0) {
-            alert("Por favor, introduce un valor válido para Ka.");
+    baseType.addEventListener("change", () => {
+        if (baseType.value === "weak") {
+            kbContainer.classList.remove("hidden");
+        } else {
+            kbContainer.classList.add("hidden");
+        }
+    });
+
+    // === CÁLCULOS PARA ÁCIDOS ===
+    document.getElementById("btn-calculate-acid").addEventListener("click", () => {
+        const type = acidType.value;
+        const conc = parseFloat(document.getElementById("acid-conc").value);
+        const resultsDiv = document.getElementById("acid-results");
+
+        if (isNaN(conc) || conc <= 0) {
+            alert("Por favor, ingresa una concentración válida mayor a 0.");
             return;
         }
-        // Resolución exacta usando la ecuación cuadrática: x^2 + Ka*x - Ka*C = 0
-        h_concentration = (-ka + Math.sqrt(Math.pow(ka, 2) + 4 * ka * conc)) / 2;
-    }
 
-    // Cálculos derivados
-    const pH = -Math.log10(h_concentration);
-    const oh_concentration = Kw / h_concentration;
-    const pOH = 14 - pH;
+        let hConc = 0;
 
-    // Renderizar resultados
-    resultsDiv.style.display = 'block';
-    resultsDiv.innerHTML = `
-        <h4>Resultados del Análisis:</h4>
-        <p><strong>pH:</strong> ${pH.toFixed(2)}</p>
-        <p><strong>pOH:</strong> ${pOH.toFixed(2)}</p>
-        <p><strong>Concentración de protones [H⁺]:</strong> ${formatValue(h_concentration)} M</p>
-        <p><strong>Concentración de hidroxilos [OH⁻]:</strong> ${formatValue(oh_concentration)} M</p>
-    `;
-}
+        if (type === "strong") {
+            hConc = conc;
+        } else {
+            const ka = parseFloat(document.getElementById("acid-ka").value);
+            if (isNaN(ka) || ka <= 0) {
+                alert("Por favor, ingresa una constante Ka válida.");
+                return;
+            }
+            // Fórmula aproximada para ácidos débiles: [H+] = √(Ka * C)
+            hConc = Math.sqrt(ka * conc);
+        }
 
-// CÁLCULOS PARA BASES
-function calcularBase() {
-    const type = document.getElementById('base-type').value;
-    const conc = parseFloat(document.getElementById('base-conc').value);
-    const resultsDiv = document.getElementById('base-results');
-    
-    if (isNaN(conc) || conc <= 0) {
-        alert("Por favor, introduce una concentración válida mayor que 0.");
-        return;
-    }
+        const ph = -Math.log10(hConc);
+        const poh = 14 - ph;
+        const ohConc = Math.pow(10, -poh);
 
-    let oh_concentration = 0;
+        resultsDiv.innerHTML = `
+            <h4>Resultados del Ácido:</h4>
+            <p><strong>pH:</strong> ${ph.toFixed(2)}</p>
+            <p><strong>pOH:</strong> ${poh.toFixed(2)}</p>
+            <p><strong>[H<sup>+</sup>]:</strong> ${hConc.toExponential(4)} M</p>
+            <p><strong>[OH<sup>-</sup>]:</strong> ${ohConc.toExponential(4)} M</p>
+        `;
+        resultsDiv.classList.remove("hidden");
+    });
 
-    if (type === 'strong') {
-        // Base fuerte: [OH-] = Concentración inicial
-        oh_concentration = conc;
-    } else {
-        // Base débil: Requiere constante Kb
-        const kb = parseFloat(document.getElementById('base-kb').value);
-        if (isNaN(kb) || kb <= 0) {
-            alert("Por favor, introduce un valor válido para Kb.");
+    // === CÁLCULOS PARA BASES ===
+    document.getElementById("btn-calculate-base").addEventListener("click", () => {
+        const type = baseType.value;
+        const conc = parseFloat(document.getElementById("base-conc").value);
+        const resultsDiv = document.getElementById("base-results");
+
+        if (isNaN(conc) || conc <= 0) {
+            alert("Por favor, ingresa una concentración válida mayor a 0.");
             return;
         }
-        // Resolución exacta usando la ecuación cuadrática: x^2 + Kb*x - Kb*C = 0
-        oh_concentration = (-kb + Math.sqrt(Math.pow(kb, 2) + 4 * kb * conc)) / 2;
-    }
 
-    // Cálculos derivados
-    const pOH = -Math.log10(oh_concentration);
-    const pH = 14 - pOH;
-    const h_concentration = Kw / oh_concentration;
+        let ohConc = 0;
 
-    // Renderizar resultados
-    resultsDiv.style.display = 'block';
-    resultsDiv.innerHTML = `
-        <h4>Resultados del Análisis:</h4>
-        <p><strong>pH:</strong> ${pH.toFixed(2)}</p>
-        <p><strong>pOH:</strong> ${pOH.toFixed(2)}</p>
-        <p><strong>Concentración de hidroxilos [OH⁻]:</strong> ${formatValue(oh_concentration)} M</p>
-        <p><strong>Concentración de protones [H⁺]:</strong> ${formatValue(h_concentration)} M</p>
-    `;
-}
+        if (type === "strong") {
+            ohConc = conc;
+        } else {
+            const kb = parseFloat(document.getElementById("base-kb").value);
+            if (isNaN(kb) || kb <= 0) {
+                alert("Por favor, ingresa una constante Kb válida.");
+                return;
+            }
+            // Fórmula aproximada para bases débiles: [OH-] = √(Kb * C)
+            ohConc = Math.sqrt(kb * conc);
+        }
+
+        const poh = -Math.log10(ohConc);
+        const ph = 14 - poh;
+        const hConc = Math.pow(10, -ph);
+
+        resultsDiv.innerHTML = `
+            <h4>Resultados de la Base:</h4>
+            <p><strong>pH:</strong> ${ph.toFixed(2)}</p>
+            <p><strong>pOH:</strong> ${poh.toFixed(2)}</p>
+            <p><strong>[H<sup>+</sup>]:</strong> ${hConc.toExponential(4)} M</p>
+            <p><strong>[OH<sup>-</sup>]:</strong> ${ohConc.toExponential(4)} M</p>
+        `;
+        resultsDiv.classList.remove("hidden");
+    });
+});

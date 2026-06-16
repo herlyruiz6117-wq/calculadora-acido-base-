@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -10,136 +10,130 @@
 
     <header>
         <h1>Calculadora de Equilibrio Ácido-Base</h1>
-        <p>Tu herramienta interactiva para cálculos de pH, $[H^+]$ y $[OH^-]$</p>
+        <p>Tu herramienta interactiva para cálculos de pH, [H<sup>+</sup>] y [OH<sup>-</sup>]</p>
     </header>
 
     <main class="container">
-        
         <section class="card">
             <h2>1. Ácidos Fuertes y Débiles</h2>
-            <div class="intro">
-                <p><strong>Introducción:</strong> Los ácidos son sustancias que liberan protones ($H^+$) en solución acuosa. Los <strong>ácidos fuertes</strong> se ionizan completamente, por lo que la concentración del ácido es igual a la de $[H^+]$. Los <strong>ácidos débiles</strong> se ionizan parcialmente, estableciendo un equilibrio químico.</p>
-            </div>
-            <div class="formulas">
-                <h3>Fórmulas Clave:</h3>
-                <ul>
-                    <li>$pH = -\log[H^+]$</li>
-                    <li>$[H^+] = 10^{-pH}$</li>
-                    <li>$[OH^-] = 10^{-14} / [H^+]$</li>
-                    <li>$pOH = 14 - pH$</li>
-                </ul>
-            </div>
+            <p><strong>Introducción:</strong> Los ácidos son sustancias que liberan protones (H<sup>+</sup>) en solución acuosa. Los ácidos fuertes se ionizan completamente, por lo que la concentración del ácido es igual a la de [H<sup>+</sup>]. Los ácidos débiles se ionizan parcialmente, estableciendo un equilibrio químico.</p>
             
+            <h3>Fórmulas Clave:</h3>
+            <div class="formulas">
+                <p>pH = -log[H<sup>+</sup>]</p>
+                <p>[H<sup>+</sup>] = 10<sup>-pH</sup></p>
+                <p>[OH<sup>-</sup>] = 10<sup>-14</sup> / [H<sup>+</sup>]</p>
+                <p>pOH = 14 - pH</p>
+            </div>
+
+            <h3>Calculadora de Ácidos</h3>
             <div class="calculator-box">
-                <h3>Calculadora de Ácidos</h3>
-                <div class="input-group">
-                    <label for="acid-type">Tipo de Ácido:</label>
-                    <select id="acid-type">
-                        <option value="strong">Ácido Fuerte (Ej: HCl)</option>
-                        <option value="weak">Ácido Débil (Ej: CH₃COOH)</option>
-                    </select>
+                <label for="acid-type">Tipo de Ácido:</label>
+                <select id="acid-type">
+                    <option value="strong">Ácido Fuerte (Ej: HCl)</option>
+                    <option value="weak">Ácido Débil (Ej: CH₃COOH)</option>
+                </select>
+
+                <div id="ka-acid-container" class="hidden">
+                    <label for="acid-ka">Constante de Acidez (K<sub>a</sub>):</label>
+                    <input type="number" id="acid-ka" placeholder="Ej: 1.8e-5" step="any">
                 </div>
-                <div class="input-group">
-                    <label for="acid-conc">Concentración Inicial (M):</label>
-                    <input type="number" id="acid-conc" step="any" placeholder="Ej: 0.1">
-                </div>
-                <div class="input-group id-ka" style="display: none;">
-                    <label for="acid-ka">Constante de Acidez ($K_a$):</label>
-                    <input type="number" id="acid-ka" step="any" placeholder="Ej: 1.8e-5">
-                </div>
-                <button onclick="calcularAcido()">Calcular</button>
-                
-                <div class="results" id="acid-results">
-                    </div>
+
+                <label for="acid-conc">Concentración Inicial (M):</label>
+                <input type="number" id="acid-conc" placeholder="Ej: 0.1" step="any">
+
+                <button id="btn-calculate-acid">Calcular</button>
+
+                <div id="acid-results" class="results hidden"></div>
             </div>
         </section>
 
         <section class="card">
             <h2>2. Bases Fuertes y Débiles</h2>
-            <div class="intro">
-                <p><strong>Introducción:</strong> Las bases son sustancias que aceptan protones o liberan iones hidroxilo ($OH^-$). Las <strong>bases fuertes</strong> se disocian al 100%, mientras que las <strong>bases débiles</strong> reaccionan parcialmente con el agua para generar $[OH^-]$.</p>
-            </div>
-            <div class="formulas">
-                <h3>Fórmulas Clave:</h3>
-                <ul>
-                    <li>$pOH = -\log[OH^-]$</li>
-                    <li>$[OH^-] = 10^{-pOH}$</li>
-                    <li>$pH = 14 - pOH$</li>
-                    <li>$[H^+] = 10^{-14} / [OH^-]$</li>
-                </ul>
-            </div>
+            <p><strong>Introducción:</strong> Las bases son sustancias que aceptan protones o liberan iones hidroxilo (OH<sup>-</sup>). Las bases fuertes se disocian al 100%, mientras que las bases débiles reaccionan parcialmente con el agua para generar [OH<sup>-</sup>].</p>
             
+            <h3>Fórmulas Clave:</h3>
+            <div class="formulas">
+                <p>pOH = -log[OH<sup>-</sup>]</p>
+                <p>[OH<sup>-</sup>] = 10<sup>-pOH</sup></p>
+                <p>pH = 14 - pOH</p>
+                <p>[H<sup>+</sup>] = 10<sup>-14</sup> / [OH<sup>-</sup>]</p>
+            </div>
+
+            <h3>Calculadora de Bases</h3>
             <div class="calculator-box">
-                <h3>Calculadora de Bases</h3>
-                <div class="input-group">
-                    <label for="base-type">Tipo de Base:</label>
-                    <select id="base-type">
-                        <option value="strong">Base Fuerte (Ej: NaOH)</option>
-                        <option value="weak">Base Débil (Ej: NH₃)</option>
-                    </select>
+                <label for="base-type">Tipo de Base:</label>
+                <select id="base-type">
+                    <option value="strong">Base Fuerte (Ej: NaOH)</option>
+                    <option value="weak">Base Débil (Ej: NH₃)</option>
+                </select>
+
+                <div id="kb-base-container" class="hidden">
+                    <label for="base-kb">Constante de Basicidad (K<sub>b</sub>):</label>
+                    <input type="number" id="base-kb" placeholder="Ej: 1.8e-5" step="any">
                 </div>
-                <div class="input-group">
-                    <label for="base-conc">Concentración Inicial (M):</label>
-                    <input type="number" id="base-conc" step="any" placeholder="Ej: 0.05">
-                </div>
-                <div class="input-group id-kb" style="display: none;">
-                    <label for="base-kb">Constante de Basicidad ($K_b$):</label>
-                    <input type="number" id="base-kb" step="any" placeholder="Ej: 1.8e-5">
-                </div>
-                <button onclick="calcularBase()">Calcular</button>
-                
-                <div class="results" id="base-results">
-                    </div>
+
+                <label for="base-conc">Concentración Inicial (M):</label>
+                <input type="number" id="base-conc" placeholder="Ej: 0.05" step="any">
+
+                <button id="btn-calculate-base">Calcular</button>
+
+                <div id="base-results" class="results hidden"></div>
             </div>
         </section>
 
-        <section class="card ejemplos">
+        <section class="card table-card">
             <h2>Guía de Ejemplos Prácticos</h2>
             <p>Puedes usar estos valores reales para probar la precisión de la calculadora:</p>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Sustancia</th>
-                        <th>Tipo</th>
-                        <th>Concentración</th>
-                        <th>Constante ($K$)</th>
-                        <th>pH Esperado</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>$HCl$ (Ácido Clorhídrico)</td>
-                        <td>Ácido Fuerte</td>
-                        <td>0.1 M</td>
-                        <td>-</td>
-                        <td>1.00</td>
-                    </tr>
-                    <tr>
-                        <td>$CH_3COOH$ (Ácido Acético)</td>
-                        <td>Ácido Débil</td>
-                        <td>0.1 M</td>
-                        <td>$1.8 \times 10^{-5}$</td>
-                        <td>2.87</td>
-                    </tr>
-                    <tr>
-                        <td>$NaOH$ (Hidróxido de Sodio)</td>
-                        <td>Base Fuerte</td>
-                        <td>0.01 M</td>
-                        <td>-</td>
-                        <td>12.00</td>
-                    </tr>
-                    <tr>
-                        <td>$NH_3$ (Aoníaco)</td>
-                        <td>Base Débil</td>
-                        <td>0.1 M</td>
-                        <td>$1.8 \times 10^{-5}$</td>
-                        <td>11.13</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sustancia</th>
+                            <th>Tipo</th>
+                            <th>Concentración</th>
+                            <th>Constante (K)</th>
+                            <th>pH Esperado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>HCl (Ácido Clorhídrico)</td>
+                            <td>Ácido Fuerte</td>
+                            <td>0.1 M</td>
+                            <td>-</td>
+                            <td>1.00</td>
+                        </tr>
+                        <tr>
+                            <td>CH<sub>3</sub>COOH (Ácido Acético)</td>
+                            <td>Ácido Débil</td>
+                            <td>0.1 M</td>
+                            <td>1.8 x 10<sup>-5</sup></td>
+                            <td>2.87</td>
+                        </tr>
+                        <tr>
+                            <td>NaOH (Hidróxido de Sodio)</td>
+                            <td>Base Fuerte</td>
+                            <td>0.01 M</td>
+                            <td>-</td>
+                            <td>12.00</td>
+                        </tr>
+                        <tr>
+                            <td>NH<sub>3</sub> (Amoníaco)</td>
+                            <td>Base Débil</td>
+                            <td>0.1 M</td>
+                            <td>1.8 x 10<sup>-5</sup></td>
+                            <td>11.13</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </section>
-
     </main>
+
+    <footer>
+        <p>&copy; 2026 - Calculadora de Equilibrio Químico</p>
+    </footer>
 
     <script src="system.js"></script>
 </body>
