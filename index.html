@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Ácido-Base</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Calculadora de Equilibrio Ácido-Base</h1>
+        <p>Tu herramienta interactiva para cálculos de pH, $[H^+]$ y $[OH^-]$</p>
+    </header>
+
+    <main class="container">
+        
+        <section class="card">
+            <h2>1. Ácidos Fuertes y Débiles</h2>
+            <div class="intro">
+                <p><strong>Introducción:</strong> Los ácidos son sustancias que liberan protones ($H^+$) en solución acuosa. Los <strong>ácidos fuertes</strong> se ionizan completamente, por lo que la concentración del ácido es igual a la de $[H^+]$. Los <strong>ácidos débiles</strong> se ionizan parcialmente, estableciendo un equilibrio químico.</p>
+            </div>
+            <div class="formulas">
+                <h3>Fórmulas Clave:</h3>
+                <ul>
+                    <li>$pH = -\log[H^+]$</li>
+                    <li>$[H^+] = 10^{-pH}$</li>
+                    <li>$[OH^-] = 10^{-14} / [H^+]$</li>
+                    <li>$pOH = 14 - pH$</li>
+                </ul>
+            </div>
+            
+            <div class="calculator-box">
+                <h3>Calculadora de Ácidos</h3>
+                <div class="input-group">
+                    <label for="acid-type">Tipo de Ácido:</label>
+                    <select id="acid-type">
+                        <option value="strong">Ácido Fuerte (Ej: HCl)</option>
+                        <option value="weak">Ácido Débil (Ej: CH₃COOH)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="acid-conc">Concentración Inicial (M):</label>
+                    <input type="number" id="acid-conc" step="any" placeholder="Ej: 0.1">
+                </div>
+                <div class="input-group id-ka" style="display: none;">
+                    <label for="acid-ka">Constante de Acidez ($K_a$):</label>
+                    <input type="number" id="acid-ka" step="any" placeholder="Ej: 1.8e-5">
+                </div>
+                <button onclick="calcularAcido()">Calcular</button>
+                
+                <div class="results" id="acid-results">
+                    </div>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>2. Bases Fuertes y Débiles</h2>
+            <div class="intro">
+                <p><strong>Introducción:</strong> Las bases son sustancias que aceptan protones o liberan iones hidroxilo ($OH^-$). Las <strong>bases fuertes</strong> se disocian al 100%, mientras que las <strong>bases débiles</strong> reaccionan parcialmente con el agua para generar $[OH^-]$.</p>
+            </div>
+            <div class="formulas">
+                <h3>Fórmulas Clave:</h3>
+                <ul>
+                    <li>$pOH = -\log[OH^-]$</li>
+                    <li>$[OH^-] = 10^{-pOH}$</li>
+                    <li>$pH = 14 - pOH$</li>
+                    <li>$[H^+] = 10^{-14} / [OH^-]$</li>
+                </ul>
+            </div>
+            
+            <div class="calculator-box">
+                <h3>Calculadora de Bases</h3>
+                <div class="input-group">
+                    <label for="base-type">Tipo de Base:</label>
+                    <select id="base-type">
+                        <option value="strong">Base Fuerte (Ej: NaOH)</option>
+                        <option value="weak">Base Débil (Ej: NH₃)</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="base-conc">Concentración Inicial (M):</label>
+                    <input type="number" id="base-conc" step="any" placeholder="Ej: 0.05">
+                </div>
+                <div class="input-group id-kb" style="display: none;">
+                    <label for="base-kb">Constante de Basicidad ($K_b$):</label>
+                    <input type="number" id="base-kb" step="any" placeholder="Ej: 1.8e-5">
+                </div>
+                <button onclick="calcularBase()">Calcular</button>
+                
+                <div class="results" id="base-results">
+                    </div>
+            </div>
+        </section>
+
+        <section class="card ejemplos">
+            <h2>Guía de Ejemplos Prácticos</h2>
+            <p>Puedes usar estos valores reales para probar la precisión de la calculadora:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sustancia</th>
+                        <th>Tipo</th>
+                        <th>Concentración</th>
+                        <th>Constante ($K$)</th>
+                        <th>pH Esperado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>$HCl$ (Ácido Clorhídrico)</td>
+                        <td>Ácido Fuerte</td>
+                        <td>0.1 M</td>
+                        <td>-</td>
+                        <td>1.00</td>
+                    </tr>
+                    <tr>
+                        <td>$CH_3COOH$ (Ácido Acético)</td>
+                        <td>Ácido Débil</td>
+                        <td>0.1 M</td>
+                        <td>$1.8 \times 10^{-5}$</td>
+                        <td>2.87</td>
+                    </tr>
+                    <tr>
+                        <td>$NaOH$ (Hidróxido de Sodio)</td>
+                        <td>Base Fuerte</td>
+                        <td>0.01 M</td>
+                        <td>-</td>
+                        <td>12.00</td>
+                    </tr>
+                    <tr>
+                        <td>$NH_3$ (Aoníaco)</td>
+                        <td>Base Débil</td>
+                        <td>0.1 M</td>
+                        <td>$1.8 \times 10^{-5}$</td>
+                        <td>11.13</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+    </main>
+
+    <script src="system.js"></script>
+</body>
+</html>
